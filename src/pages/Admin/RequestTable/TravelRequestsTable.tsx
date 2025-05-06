@@ -1,13 +1,43 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Filter, Calendar, ChevronDown, MoreVertical } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Filter, Calendar, ChevronDown, X } from 'lucide-react';
 import { dummyTravelRequests, getStatusColor } from '../../../utils/travelRequestData';
+
+// Date formatting function
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).replace(/\//g, '-');
+};
 
 // Main table component
 export default function TravelRequestsTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showColumnFilter, setShowColumnFilter] = useState(false);
+  const [filterMenuPosition, setFilterMenuPosition] = useState({ top: 0, left: 0 });
+  const filterButtonRef = useRef(null);
+  const filterMenuRef = useRef(null);
   const navigate = useNavigate();
+  
+  // All available columns
+  const allColumns = [
+    { id: 'requestId', label: 'Request ID', checked: true },
+    { id: 'name', label: 'Name', checked: true },
+    { id: 'projectCode', label: 'Project Code', checked: true },
+    { id: 'travelType', label: 'Travel Type', checked: true },
+    { id: 'source', label: 'Source', checked: true },
+    { id: 'destination', label: 'Destination', checked: true },
+    { id: 'travelDates', label: 'Travel Dates', checked: true },
+    { id: 'status', label: 'Status', checked: true },
+  ];
+  
+  // State for visible columns
+  const [visibleColumns, setVisibleColumns] = useState(allColumns);
   
   const filteredRequests = dummyTravelRequests.filter(request => 
     request.requestId.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -19,9 +49,53 @@ export default function TravelRequestsTable() {
   const totalPages = Math.ceil(filteredRequests.length / 10);
   const paginatedRequests = filteredRequests.slice((currentPage - 1) * 10, currentPage * 10);
 
-  const handleRowClick = (requestId: string) => {
+  const handleRowClick = (requestId) => {
     navigate(`/travel-request-details/${requestId}`);
   };
+
+  const toggleColumnFilter = () => {
+    if (filterButtonRef.current) {
+      const rect = filterButtonRef.current.getBoundingClientRect();
+      setFilterMenuPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+      });
+    }
+    setShowColumnFilter(!showColumnFilter);
+  };
+
+  const handleColumnToggle = (columnId) => {
+    setVisibleColumns(prev => {
+      // Make sure at least one column is always visible
+      const currentlyChecked = prev.filter(col => col.checked).length;
+      if (currentlyChecked === 1 && prev.find(col => col.id === columnId)?.checked) {
+        return prev;
+      }
+      
+      return prev.map(col => 
+        col.id === columnId ? { ...col, checked: !col.checked } : col
+      );
+    });
+  };
+
+  // Close filter menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        filterMenuRef.current && 
+        !filterMenuRef.current.contains(event.target) &&
+        filterButtonRef.current && 
+        !filterButtonRef.current.contains(event.target)
+      ) {
+        setShowColumnFilter(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="w-full bg-white rounded-lg shadow">
@@ -53,70 +127,118 @@ export default function TravelRequestsTable() {
           <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
             Status <ChevronDown className="w-4 h-4" />
           </button>
-          <button className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+          <button 
+            ref={filterButtonRef}
+            className={`flex items-center gap-1 px-3 py-2 text-sm font-medium ${showColumnFilter ? 'text-white bg-purple-600' : 'text-gray-700 bg-white'} border border-gray-300 rounded-lg hover:${showColumnFilter ? 'bg-purple-700' : 'bg-gray-50'}`}
+            onClick={toggleColumnFilter}
+          >
             <Filter className="w-4 h-4" />
+            <span>Columns</span>
           </button>
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3">Request ID</th>
-              <th scope="col" className="px-6 py-3">Name</th>
-              <th scope="col" className="px-6 py-3">Project Code</th>
-              <th scope="col" className="px-6 py-3">Travel Type</th>
-              <th scope="col" className="px-6 py-3">Source</th>
-              <th scope="col" className="px-6 py-3">Destination</th>
-              <th scope="col" className="px-6 py-3">Travel & Return Date</th>
-              <th scope="col" className="px-6 py-3">Status</th>
-              <th scope="col" className="px-6 py-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedRequests.map((request, index) => (
-              <tr 
-                key={index} 
-                className="bg-white border-b hover:bg-gray-50 cursor-pointer"
-                onClick={() => handleRowClick(request.requestId)}
-              >
-                <td className="px-6 py-4 font-medium text-gray-900">{request.requestId}</td>
-                <td className="px-6 py-4">{request.name}</td>
-                <td className="px-6 py-4">{request.projectCode}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${request.travelType === 'International' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
-                    {request.travelType}
-                  </span>
-                </td>
-                <td className="px-6 py-4">{request.source}</td>
-                <td className="px-6 py-4">{request.destination}</td>
-                <td className="px-6 py-4">
-                  {request.travelDates.departureDate}
-                  <span className="mx-2 text-gray-400">to</span>
-                  {request.travelDates.returnDate}
-                </td>
-                <td className="px-6 py-4">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(request.status)}`}>
-                    {request.status}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <button 
-                    className="p-2 rounded-full hover:bg-gray-200" 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log(`Open actions menu for ${request.requestId}`);
-                    }}
-                  >
-                    <MoreVertical className="w-5 h-5 text-gray-500" />
-                  </button>
-                </td>
-              </tr>
+      {/* Column filter menu */}
+      {showColumnFilter && (
+        <div 
+          ref={filterMenuRef}
+          className="absolute z-10 bg-white border border-gray-200 rounded-lg shadow-lg p-3"
+          style={{
+            top: `${filterMenuPosition.top}px`,
+            left: `${filterMenuPosition.left}px`,
+          }}
+        >
+          <div className="mb-2 flex justify-between items-center">
+            <h3 className="font-medium text-gray-700">Show/Hide Columns</h3>
+            <button 
+              className="text-gray-500 hover:text-gray-700"
+              onClick={() => setShowColumnFilter(false)}
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="divide-y divide-gray-100">
+            {visibleColumns.map((column) => (
+              <div key={column.id} className="py-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id={column.id}
+                  checked={column.checked}
+                  onChange={() => handleColumnToggle(column.id)}
+                  className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                />
+                <label htmlFor={column.id} className="text-sm text-gray-700">
+                  {column.label}
+                </label>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
+      )}
+
+      {/* Table with horizontal scroll */}
+      <div className="overflow-x-auto">
+        <div className="min-w-full inline-block align-middle">
+          <div className="overflow-x-auto border-b border-gray-200">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  {visibleColumns.filter(col => col.checked).map((column) => (
+                    <th key={column.id} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                      {column.label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {paginatedRequests.map((request, index) => (
+                  <tr 
+                    key={index} 
+                    className="hover:bg-gray-50 cursor-pointer"
+                    onClick={() => handleRowClick(request.requestId)}
+                  >
+                    {visibleColumns.find(col => col.id === 'requestId')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{request.requestId}</td>
+                    )}
+                    {visibleColumns.find(col => col.id === 'name')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{request.name}</td>
+                    )}
+                    {visibleColumns.find(col => col.id === 'projectCode')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{request.projectCode}</td>
+                    )}
+                    {visibleColumns.find(col => col.id === 'travelType')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${request.travelType === 'International' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                          {request.travelType}
+                        </span>
+                      </td>
+                    )}
+                    {visibleColumns.find(col => col.id === 'source')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{request.source}</td>
+                    )}
+                    {visibleColumns.find(col => col.id === 'destination')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{request.destination}</td>
+                    )}
+                    {visibleColumns.find(col => col.id === 'travelDates')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatDate(request.travelDates.departureDate)}
+                        <span className="mx-2 text-gray-400">to</span>
+                        {formatDate(request.travelDates.returnDate)}
+                      </td>
+                    )}
+                    {visibleColumns.find(col => col.id === 'status')?.checked && (
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap ${getStatusColor(request.status)}`}>
+                          {request.status}
+                        </span>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       {/* Pagination */}
