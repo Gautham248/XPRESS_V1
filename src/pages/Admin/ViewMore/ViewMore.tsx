@@ -1,8 +1,9 @@
-import React from 'react'
+import RequestTimeline from "./Stepper/RequestTimeline"
 
 function ViewMore() {
   return (
-    <div>ViewMore</div>
+    // <div>ViewMore</div>
+    <RequestTimeline />
   )
 }
 

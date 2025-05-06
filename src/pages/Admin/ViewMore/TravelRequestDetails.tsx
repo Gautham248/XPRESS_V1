@@ -100,39 +100,40 @@ export default function TravelRequestDetails() {
     <div className="p-6">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Request Timeline */}
-        <div className="w-full lg:w-2/5 bg-white rounded-lg shadow p-6">
+        <div className="w-full lg:w-2/5 bg-white rounded-lg shadow p-6 lg:ml-0">
           <h2 className="text-xl font-semibold mb-6">Request Timeline</h2>
-          
+
           <div className="relative">
             {updatedTimelineSteps.map((step, index) => (
-              <div key={step.id} className="flex mb-8 relative">
-                {/* Timeline connector line */}
-                {index < updatedTimelineSteps.length - 1 && (
-                  <div className={`absolute left-6 top-6 h-full w-0.5 -z-10 ${
-                    step.completed ? 'bg-green-400' : 'bg-gray-200'
-                  }`}></div>
-                )}
+              <div key={step.id} className="flex items-start mb-8 relative">
                 
-                {/* Circle indicator */}
-                <div className={`flex items-center justify-center rounded-full w-12 h-12 ${
-                  step.active 
-                    ? 'bg-green-100 text-green-600' 
-                    : step.completed 
-                      ? 'bg-green-500 text-white' 
-                      : 'bg-gray-200 text-gray-500'
-                }`}>
+                {/* Connector Line */}
+                {index < updatedTimelineSteps.length - 1 && (
+                  <div
+                    className={`absolute left-[1.5rem] top-[3rem] h-full w-0.5 ${
+                      step.completed ? 'bg-green-100' : 'bg-gray-100'
+                    }`}
+                  />
+                )}
+
+                {/* Circle Indicator */}
+                <div
+                  className={`flex items-center justify-center rounded-full w-12 h-12 shrink-0 ${
+                    step.active
+                      ? 'bg-purple-100 text-purple-500'
+                      : step.completed
+                      ? 'bg-green-100 text-green-500'
+                      : 'bg-gray-100 text-gray-300'
+                  }`}
+                >
                   {step.id}
                 </div>
-                
-                {/* Status text */}
+
+                {/* Status and Description */}
                 <div className="ml-4">
-                  <p className={`font-medium ${
-                    step.active 
-                      ? 'text-green-600' 
-                      : step.completed 
-                        ? 'text-green-600' 
-                        : 'text-gray-500'
-                  }`}>
+                  <p
+                    className={`font-normal`}
+                  >
                     {step.status}
                   </p>
                   {step.description && (
@@ -141,21 +142,22 @@ export default function TravelRequestDetails() {
                 </div>
               </div>
             ))}
-            
-            {/* Add rejection indicator if status is rejected */}
+
+            {/* Rejected Step */}
             {isRejected && (
-              <div className="flex mb-8 relative">
+              <div className="flex items-start mb-8 relative">
                 <div className="flex items-center justify-center rounded-full w-12 h-12 bg-red-100 text-red-600">
                   ✕
                 </div>
                 <div className="ml-4">
-                  <p className="font-medium text-red-600">Rejected</p>
+                  <p className="font-semibold text-red-600">Rejected</p>
                   <p className="text-sm text-gray-500">Request was declined</p>
                 </div>
               </div>
             )}
           </div>
         </div>
+
         
         {/* Request Details */}
         <div className="w-full lg:w-3/5 bg-white rounded-lg shadow">
