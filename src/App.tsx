@@ -5,7 +5,10 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
-import RequestManagement from './pages/RequestManagement/RequestManagement';
+import RequestManagement from './pages/Admin/RequestManagement/RequestManagement';
+import { Calendar } from 'lucide-react';
+import AdminCalendar from './pages/Admin/Calendar/AdminCalendar';
+import ViewMore from './pages/Admin/ViewMore/ViewMore';
 
 function App() {
   return (
@@ -14,6 +17,8 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="calendar" element={<AdminCalendar />} />
+          <Route path="viewMore" element={<ViewMore />} />
           <Route path="about" element={<About />} />
           <Route path="users" element={<div className="p-6 bg-white rounded-lg shadow-sm"><h2 className="text-2xl font-semibold text-gray-800">Users Page</h2></div>} />
           <Route path="reports" element={<RequestManagement/>} />
