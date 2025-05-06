@@ -11,6 +11,7 @@ export interface TravelRequestTableRow {
     };
     status: string;
     department?: string;
+    reportingManager: string; // Added this field from the first file
   }
   
   // Helper function to get status color
@@ -53,7 +54,8 @@ export interface TravelRequestTableRow {
         departureDate: "2025-03-20",
         returnDate: "2025-06-11"
       },
-      status: "Pending"
+      status: "Pending",
+      reportingManager: "Robert Thompson"
     },
     {
       requestId: "REQ002",
@@ -67,7 +69,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-01",
         returnDate: "2023-11-10"
       },
-      status: "Manager Approved"
+      status: "Manager Approved",
+      reportingManager: "Lisa Martinez"
     },
     {
       requestId: "REQ003",
@@ -81,7 +84,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-12",
         returnDate: "2023-11-19"
       },
-      status: "Pending"
+      status: "Pending",
+      reportingManager: "Thomas Lee"
     },
     {
       requestId: "REQ004",
@@ -95,7 +99,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-20",
         returnDate: "2023-11-25"
       },
-      status: "Pending"
+      status: "Pending",
+      reportingManager: "Sarah Davis"
     },
     {
       requestId: "REQ005",
@@ -109,7 +114,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-08",
         returnDate: "2023-11-15"
       },
-      status: "Tickets Dispatched"
+      status: "Tickets Dispatched",
+      reportingManager: "James Wilson"
     },
     {
       requestId: "REQ006",
@@ -123,7 +129,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-02",
         returnDate: "2023-11-09"
       },
-      status: "Rejected"
+      status: "Rejected",
+      reportingManager: "Emma Brown"
     },
     {
       requestId: "REQ007",
@@ -137,7 +144,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-10",
         returnDate: "2023-11-16"
       },
-      status: "Rejected"
+      status: "Rejected",
+      reportingManager: "Michael Chen"
     },
     {
       requestId: "REQ008",
@@ -151,7 +159,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-01",
         returnDate: "2023-11-07"
       },
-      status: "Pending"
+      status: "Pending",
+      reportingManager: "Jennifer Adams"
     },
     {
       requestId: "REQ009",
@@ -165,7 +174,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-05",
         returnDate: "2023-11-12"
       },
-      status: "Manager Approved"
+      status: "Manager Approved",
+      reportingManager: "David Kim"
     },
     {
       requestId: "REQ010",
@@ -179,7 +189,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-12",
         returnDate: "2023-11-18"
       },
-      status: "Tickets Dispatched"
+      status: "Tickets Dispatched",
+      reportingManager: "Laura Taylor"
     },
     {
       requestId: "REQ011",
@@ -193,7 +204,8 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-20",
         returnDate: "2023-11-25"
       },
-      status: "Pending"
+      status: "Pending",
+      reportingManager: "Chris Patel"
     },
     {
       requestId: "REQ012",
@@ -207,6 +219,7 @@ export interface TravelRequestTableRow {
         departureDate: "2023-11-08",
         returnDate: "2023-11-15"
       },
-      status: "Tickets Dispatched"
+      status: "Tickets Dispatched",
+      reportingManager: "Anna Rodriguez"
     }
   ];
