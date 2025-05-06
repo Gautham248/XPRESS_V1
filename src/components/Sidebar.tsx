@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Info, Settings, X, BarChart2, Users, FileText } from 'lucide-react';
+import { Home, Info, Settings, X, BarChart2, Users, FileText, Calendar } from 'lucide-react';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -69,6 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
           {/* Navigation Links */}
           <nav className="flex-1 px-2 py-4 space-y-1">
             <NavItem to="/" icon={<Home size={20} />} label="Home" closeSidebar={closeSidebar} />
+            <NavItem to="/calendar" icon={<Calendar size={20} />} label="Calendar" closeSidebar={closeSidebar} />
             {/* <NavItem to="/dashboard" icon={<BarChart2 size={20} />} label="Dashboard" closeSidebar={closeSidebar} /> */}
             {/* <NavItem to="/users" icon={<Users size={20} />} label="Users" closeSidebar={closeSidebar} /> */}
             <NavItem to="/reports" icon={<FileText size={20} />} label="Requests" closeSidebar={closeSidebar} />
