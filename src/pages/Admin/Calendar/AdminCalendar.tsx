@@ -201,6 +201,7 @@ const AdminCalendar = () => {
             isToday={isToday}
             isSelectedDate={isSelectedDate}
             handleDateSelect={handleDateSelect}
+            getEventsForDate={getEventsForDate} // Pass getEventsForDate to CalendarSidebar
           />
 
           <div className="flex-1 flex flex-col bg-white">
@@ -235,7 +236,7 @@ const AdminCalendar = () => {
           {selectedRequestId && (
             <ModalComponent 
               employeeId={selectedRequestId}
-              // onClose={handleCloseModal}
+              onClose={handleCloseModal}
             />
           )}
         </div>

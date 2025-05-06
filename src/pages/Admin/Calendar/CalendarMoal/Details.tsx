@@ -27,7 +27,7 @@ const Details: React.FC<DetailsProps> = ({ employee }) => {
       <p><span className="font-medium">Delivery Unit:</span> {employee.deliveryUnit}</p>
       <p><span className="font-medium">Source:</span> {employee.source}</p>
       <p><span className="font-medium">Destination:</span> {employee.destination}</p>
-      <p><span className="font-medium">Travel Mode:</span> {employee.travelMode}</p>
+      
       <p><span className="font-medium">Travel Category:</span> {employee.travelCategory}</p>
     </div>
   );
