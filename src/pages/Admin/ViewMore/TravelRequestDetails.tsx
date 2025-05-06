@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { dummyTravelRequests, getStatusColor } from '../../../utils/travelRequestData';
+import { dummyTravelRequests} from '../../../utils/travelRequestData';
+import EmpDetailComponent from './EmpDetailComponent';
 
 // Define timeline step type
 interface TimelineStep {
@@ -93,8 +94,7 @@ export default function TravelRequestDetails() {
   };
 
   // Convert departure/return dates to display format
-  const departureDate = formatDate(request.travelDates.departureDate);
-  const returnDate = formatDate(request.travelDates.returnDate);
+  
 
   return (
     <div className="p-6">
@@ -158,78 +158,7 @@ export default function TravelRequestDetails() {
         </div>
         
         {/* Request Details */}
-        <div className="w-full lg:w-3/5 bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">{request.name}</h1>
-              <span className={`px-3 py-1 rounded-full text-sm font-medium mt-2 inline-block ${getStatusColor(request.status)}`}>
-                {request.status}
-              </span>
-            </div>
-            
-            <button 
-              onClick={() => navigate('/requestTable')}
-              className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </button>
-          </div>
-          
-          <div className="p-6">
-            <div className="grid grid-cols-2 gap-y-6 mb-6">
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Department</h3>
-                <p className="text-gray-900">{request.department || 'Not specified'}</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-gray-500">Project Code</h3>
-                <p className="text-gray-900">{request.projectCode}</p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-4 mb-6">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="grid grid-cols-4 gap-4">
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">Mode of Travel</h3>
-                    <p className="text-gray-900">Flight</p>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">Source</h3>
-                    <p className="text-gray-900">{request.source}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">Destination</h3>
-                    <p className="text-gray-900">{request.destination}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500">Date of Travel</h3>
-                    <p className="text-gray-900">
-                      {departureDate} <span className="text-gray-500">to</span> {returnDate}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mb-6">
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${request.travelType === 'International' ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800'}`}>
-                {request.travelType}
-              </span>
-            </div>
-            
-            {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 mt-6">
-              <button className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex-1 text-center">
-                Download Itinerary
-              </button>
-              <button className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 flex-1 text-center">
-                Print Details
-              </button>
-            </div>
-          </div>
-        </div>
+        <EmpDetailComponent request={request} onBackClick={() => navigate('/requestTable') } formatDate={formatDate}/>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-// Define types for our travel request data
 export interface TravelRequestTableRow {
     requestId: string;
     name: string;
