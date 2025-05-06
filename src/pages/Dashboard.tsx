@@ -10,7 +10,7 @@ const Dashboard: React.FC = () => {
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {['Users', 'Revenue', 'Traffic', 'Conversion'].map((item, index) => (
           <div key={index} className="bg-white rounded-lg shadow-sm p-6">
             <p className="text-sm font-medium text-gray-500">{item}</p>
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

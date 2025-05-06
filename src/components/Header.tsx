@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
           >
             <Menu size={24} />
           </button>
-          <h1 className="ml-4 md:ml-0 text-xl font-semibold text-gray-800">Dashboard</h1>
+          {/* <h1 className="ml-4 md:ml-0 text-xl font-semibold text-gray-800">Dashboard</h1> */}
         </div>
         
         <div className="flex items-center space-x-4">
