@@ -1,10 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { dummyTravelRequests} from '../../../utils/travelRequestData';
+import { dummyTravelRequests, getStatusColor } from '../../../utils/travelRequestData';
+import { StepperComponent } from './Stepper/StepperComponent';
+// import { dummyTravelRequests} from '../../../utils/travelRequestData';
 import EmpDetailComponent from './EmpDetailComponent';
 
 // Define timeline step type
-interface TimelineStep {
+export interface TimelineStep {
   id: number;
   status: string;
   description?: string;
@@ -100,62 +102,8 @@ export default function TravelRequestDetails() {
     <div className="p-6">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Request Timeline */}
-        <div className="w-full lg:w-2/5 bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold mb-6">Request Timeline</h2>
-          
-          <div className="relative">
-            {updatedTimelineSteps.map((step, index) => (
-              <div key={step.id} className="flex mb-8 relative">
-                {/* Timeline connector line */}
-                {index < updatedTimelineSteps.length - 1 && (
-                  <div className={`absolute left-6 top-6 h-full w-0.5 -z-10 ${
-                    step.completed ? 'bg-green-400' : 'bg-gray-200'
-                  }`}></div>
-                )}
-                
-                {/* Circle indicator */}
-                <div className={`flex items-center justify-center rounded-full w-12 h-12 ${
-                  step.active 
-                    ? 'bg-green-100 text-green-600' 
-                    : step.completed 
-                      ? 'bg-green-500 text-white' 
-                      : 'bg-gray-200 text-gray-500'
-                }`}>
-                  {step.id}
-                </div>
-                
-                {/* Status text */}
-                <div className="ml-4">
-                  <p className={`font-medium ${
-                    step.active 
-                      ? 'text-green-600' 
-                      : step.completed 
-                        ? 'text-green-600' 
-                        : 'text-gray-500'
-                  }`}>
-                    {step.status}
-                  </p>
-                  {step.description && (
-                    <p className="text-sm text-gray-500">{step.description}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-            
-            {/* Add rejection indicator if status is rejected */}
-            {isRejected && (
-              <div className="flex mb-8 relative">
-                <div className="flex items-center justify-center rounded-full w-12 h-12 bg-red-100 text-red-600">
-                  ✕
-                </div>
-                <div className="ml-4">
-                  <p className="font-medium text-red-600">Rejected</p>
-                  <p className="text-sm text-gray-500">Request was declined</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
+        <StepperComponent steps={updatedTimelineSteps} isRejected={isRejected}/>
+
         
         {/* Request Details */}
         <EmpDetailComponent request={request} onBackClick={() => navigate('/requestTable') } formatDate={formatDate}/>

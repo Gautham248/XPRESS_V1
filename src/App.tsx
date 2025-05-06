@@ -7,7 +7,7 @@ import About from './pages/About';
 import NotFound from './pages/NotFound';
 import RequestManagement from './pages/Admin/RequestManagement/RequestManagement';
 import AdminCalendar from './pages/Admin/Calendar/AdminCalendar';
-import ViewMore from './pages/Admin/ViewMore/ViewMore';
+import ViewMore from './pages/Admin/ViewMore/TravelRequestDetails';
 import TravelRequestsTable from './pages/Admin/RequestTable/TravelRequestsTable';
 import TravelRequestDetails from './pages/Admin/ViewMore/TravelRequestDetails';
 
