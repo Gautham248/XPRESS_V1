@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { dummyTravelRequests, getStatusColor } from '../../../utils/travelRequestData';
+import { dummyTravelRequests} from '../../../utils/travelRequestData';
 import { StepperComponent } from './Stepper/StepperComponent';
 // import { dummyTravelRequests} from '../../../utils/travelRequestData';
 import EmpDetailComponent from './EmpDetailComponent';
@@ -93,11 +93,8 @@ export default function TravelRequestDetails() {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-  };
-
-  // Convert departure/return dates to display format
+  };  
   
-
   return (
     <div className="p-6">
       <div className="flex flex-col lg:flex-row gap-6">
