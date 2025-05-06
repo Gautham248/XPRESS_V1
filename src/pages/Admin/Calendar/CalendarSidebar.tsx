@@ -133,7 +133,7 @@ const CalendarSidebar = ({
 
       {!showMonthSelector && (
         <div className="px-4">
-          <div className="grid grid-cols-7 text-center mb-1 text-sm text-gray-500 gap-1">
+          <div className="grid grid-cols-7 text-center mb-1 text-sm text-gray-500 ">
             {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
               <div key={index}>{day}</div>
             ))}
@@ -159,7 +159,7 @@ const CalendarSidebar = ({
                         ? 'bg-blue-100 text-blue-500'
                         : ''
                     }
-                    ${hasEvents ? 'bg-purple-300' : ''} 
+                    ${hasEvents ? 'bg-purple-400' : ''} 
                     hover:bg-gray-100
                   `}
                 >
