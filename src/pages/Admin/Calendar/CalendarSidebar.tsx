@@ -49,6 +49,11 @@ const CalendarSidebar = ({
     toggleMonthSelector();
   };
 
+  // Get current date for comparison
+  const getCurrentDate = (): Date => {
+    return new Date();
+  };
+
   return (
     <div className="w-64 p-4 border-r border-gray-200 flex flex-col bg-white">
       <div className="text-2xl font-semibold mb-5 text-gray-800">Calendar</div>
@@ -142,7 +147,7 @@ const CalendarSidebar = ({
           <div className="grid grid-cols-7 gap-1">
             {generateMonthDays().map((day, index) => {
               const hasEvents = getEventsForDate(day.date).length > 0;
-              // Debug: Log dates with events to verify detection
+              
               if (hasEvents) {
                 console.log(`Events found on ${day.date.toISOString()}`);
               }
@@ -151,15 +156,15 @@ const CalendarSidebar = ({
                   key={index}
                   onClick={() => handleDateSelect(day.date)}
                   className={`
-                    bg-transparent border-none h-8 w-8 flex items-center justify-center rounded-full cursor-pointer text-sm m-0.5 mx-auto
+                    bg-transparent border-none h-6 w-6 flex items-center justify-center rounded-full cursor-pointer text-sm m-0.5 mx-auto
                     ${!day.isCurrentMonth ? 'text-gray-400' : 'text-gray-800'} 
-                    ${isToday(day.date) ? 'bg-blue-500 text-white' : ''}
+                    ${isToday(day.date) ? 'bg-blue-200 text-black' : ''}
                     ${
                       isSelectedDate(day.date) && !isToday(day.date)
                         ? 'bg-blue-100 text-blue-500'
                         : ''
                     }
-                    ${hasEvents ? 'bg-purple-400' : ''} 
+                    ${hasEvents ? 'bg-blue-300' : ''} 
                     hover:bg-gray-100
                   `}
                 >

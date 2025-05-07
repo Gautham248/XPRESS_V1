@@ -7,11 +7,15 @@ import ModalComponent from './CalendarMoal/CalendarModalProps';
 import { CalendarDay, CalendarView } from './types';
 
 const AdminCalendar = () => {
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 4, 6)); // May 6, 2025
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 4, 6)); // May 6, 2025
-  const [weekStartDate, setWeekStartDate] = useState<Date>(
-    getWeekStartDate(new Date(2025, 4, 6)) // Start the week from May 6, 2025
-  );
+  const getCurrentDate = (): Date => {
+    return new Date(); // Returns May 7, 2025
+  };
+
+  const today = getCurrentDate();
+  
+  const [currentMonth, setCurrentMonth] = useState<Date>(today);
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const [weekStartDate, setWeekStartDate] = useState<Date>(getWeekStartDate(today));
   const [showMonthSelector, setShowMonthSelector] = useState<boolean>(false);
   const [calendarView, setCalendarView] = useState<CalendarView>('day');
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
@@ -155,11 +159,11 @@ const AdminCalendar = () => {
   }
 
   function isToday(date: Date): boolean {
-    const today = new Date(2025, 4, 6); // May 6, 2025
+    const currentDay = getCurrentDate();
     return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
+      date.getDate() === currentDay.getDate() &&
+      date.getMonth() === currentDay.getMonth() &&
+      date.getFullYear() === currentDay.getFullYear()
     );
   }
 
@@ -171,6 +175,7 @@ const AdminCalendar = () => {
     );
   }
 
+  // Synchronize currentMonth with selectedDate
   useEffect(() => {
     if (
       selectedDate.getMonth() !== currentMonth.getMonth() ||
@@ -179,6 +184,18 @@ const AdminCalendar = () => {
       setCurrentMonth(new Date(selectedDate));
     }
   }, [selectedDate]);
+
+  // Ensure selectedDate is set to the current date on mount
+  useEffect(() => {
+    const today = getCurrentDate();
+    if (
+      selectedDate.getDate() !== today.getDate() ||
+      selectedDate.getMonth() !== today.getMonth() ||
+      selectedDate.getFullYear() !== today.getFullYear()
+    ) {
+      handleDateSelect(today);
+    }
+  }, []); // Run only on mount
 
   const weekDays = generateWeekDays();
 

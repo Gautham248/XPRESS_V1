@@ -8,7 +8,7 @@ interface CalendarHeaderProps {
   weekStartDate: Date;
   setSelectedDate: Dispatch<SetStateAction<Date>>;
   setWeekStartDate: Dispatch<SetStateAction<Date>>;
-  setCalendarView: Dispatch<SetStateAction<CalendarView>>; // Add this prop
+  setCalendarView: Dispatch<SetStateAction<CalendarView>>;
   handlePrevWeek: () => void;
   handleNextWeek: () => void;
   handlePrevDay: () => void;
@@ -23,7 +23,7 @@ const CalendarHeader = ({
   weekStartDate,
   setSelectedDate,
   setWeekStartDate,
-  setCalendarView, // Use this prop
+  setCalendarView,
   handlePrevWeek,
   handleNextWeek,
   handlePrevDay,
@@ -33,12 +33,21 @@ const CalendarHeader = ({
 }: CalendarHeaderProps) => {
   const [showViewSelector, setShowViewSelector] = useState<boolean>(false);
 
+  const getCurrentDate = (): Date => {
+    return new Date(); // Returns May 7, 2025
+  };
+
   const toggleViewSelector = () => {
     setShowViewSelector(!showViewSelector);
   };
 
   const selectView = (view: CalendarView) => {
-    setCalendarView(view); // Set the calendar view
+    setCalendarView(view);
+    if (view === 'day') {
+      const today = getCurrentDate(); // Reset to current date (May 7, 2025)
+      setSelectedDate(today);
+      setWeekStartDate(getWeekStartDate(today));
+    }
     setShowViewSelector(false);
   };
 
@@ -70,7 +79,7 @@ const CalendarHeader = ({
         <button
           className="bg-gray-100 border border-gray-200 text-gray-800 py-2 px-3 rounded mr-2 flex items-center cursor-pointer hover:bg-gray-200"
           onClick={() => {
-            const today = new Date();
+            const today = getCurrentDate();
             setSelectedDate(today);
             setWeekStartDate(getWeekStartDate(today));
           }}
