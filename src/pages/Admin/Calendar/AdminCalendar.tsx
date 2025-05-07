@@ -7,19 +7,26 @@ import ModalComponent from './CalendarMoal/CalendarModalProps';
 import { CalendarDay, CalendarView } from './types';
 
 const AdminCalendar = () => {
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [weekStartDate, setWeekStartDate] = useState<Date>(
-    getWeekStartDate(new Date())
-  );
+  const getCurrentDate = (): Date => {
+    return new Date(); // May 7, 2025
+  };
+
+  const today = getCurrentDate();
+  
+  const [currentMonth, setCurrentMonth] = useState<Date>(today);
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
+  const [weekStartDate, setWeekStartDate] = useState<Date>(getWeekStartDate(today));
   const [showMonthSelector, setShowMonthSelector] = useState<boolean>(false);
   const [calendarView, setCalendarView] = useState<CalendarView>('day');
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false);
 
   function getWeekStartDate(date: Date): Date {
     const day = date.getDay();
     const diff = date.getDate() - day;
-    return new Date(date.setDate(diff));
+    const newDate = new Date(date);
+    newDate.setDate(diff);
+    return newDate;
   }
 
   function addDays(date: Date, days: number): Date {
@@ -65,9 +72,19 @@ const AdminCalendar = () => {
   }
 
   function handleDateSelect(date: Date): void {
+    console.log("handleDateSelect called with date (UTC):", date.toISOString());
+    if (isTodayClicked) {
+      console.log("Ignoring handleDateSelect because Today button was clicked");
+      setIsTodayClicked(false);
+      return;
+    }
     setSelectedDate(date);
-    const newWeekStartDate = getWeekStartDate(new Date(date));
-    setWeekStartDate(newWeekStartDate);
+    
+    // Only update week start date if we're in week view
+    if (calendarView === 'week') {
+      const newWeekStartDate = getWeekStartDate(new Date(date));
+      setWeekStartDate(newWeekStartDate);
+    }
 
     if (calendarView === 'day') {
       setTimeout(() => {
@@ -155,11 +172,11 @@ const AdminCalendar = () => {
   }
 
   function isToday(date: Date): boolean {
-    const today = new Date(); 
+    const currentDay = getCurrentDate();
     return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
+      date.getDate() === currentDay.getDate() &&
+      date.getMonth() === currentDay.getMonth() &&
+      date.getFullYear() === currentDay.getFullYear()
     );
   }
 
@@ -179,6 +196,21 @@ const AdminCalendar = () => {
       setCurrentMonth(new Date(selectedDate));
     }
   }, [selectedDate]);
+
+  useEffect(() => {
+    const today = getCurrentDate();
+    if (
+      selectedDate.getDate() !== today.getDate() ||
+      selectedDate.getMonth() !== today.getMonth() ||
+      selectedDate.getFullYear() !== today.getFullYear()
+    ) {
+      handleDateSelect(today);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("AdminCalendar - weekStartDate changed to (UTC):", weekStartDate.toISOString());
+  }, [weekStartDate]);
 
   const weekDays = generateWeekDays();
 
@@ -216,6 +248,7 @@ const AdminCalendar = () => {
               handleNextDay={handleNextDay}
               formatDateRange={formatDateRange}
               formatSingleDate={formatSingleDate}
+              setIsTodayClicked={setIsTodayClicked}
             />
 
             <CalendarGrid
