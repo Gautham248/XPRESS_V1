@@ -30,11 +30,11 @@ const mapToEmployee = (travelRequest: typeof dummyTravelRequests[0]): Employee =
 });
 
 interface CalendarModalProps {
-  employeeId: string;
+  requestId: string;
   onClose: () => void; 
 }
 
-const CalendarModal = ({ employeeId, onClose }: CalendarModalProps) => {
+const CalendarModal = ({ requestId, onClose }: CalendarModalProps) => {
   
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   
@@ -42,10 +42,10 @@ const CalendarModal = ({ employeeId, onClose }: CalendarModalProps) => {
     
     const employee = dummyTravelRequests
       .map(mapToEmployee)
-      .find((employee: Employee) => employee.id === employeeId) || null;
+      .find((employee: Employee) => employee.id === requestId) || null;
     
     setSelectedEmployee(employee);
-  }, [employeeId]);
+  }, [requestId]);
 
   const handleClose = () => {
     onClose(); 
