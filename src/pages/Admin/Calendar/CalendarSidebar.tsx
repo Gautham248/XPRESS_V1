@@ -14,6 +14,7 @@ interface CalendarSidebarProps {
   isToday: (date: Date) => boolean;
   isSelectedDate: (date: Date) => boolean;
   handleDateSelect: (date: Date) => void;
+  getEventsForDate: (date: Date) => { id: number; title: string; date: Date; eventType: string; color: string; details: { requestId: string; status: string; travelType: string; projectCode: string } }[];
 }
 
 const monthNames = [
@@ -34,6 +35,7 @@ const CalendarSidebar = ({
   isToday,
   isSelectedDate,
   handleDateSelect,
+  getEventsForDate,
 }: CalendarSidebarProps) => {
   const formattedMonthYear = currentMonth.toLocaleString('default', {
     month: 'long',
@@ -131,32 +133,38 @@ const CalendarSidebar = ({
 
       {!showMonthSelector && (
         <div className="px-4">
-          <div className="grid grid-cols-7 text-center mb-1 text-sm text-gray-500">
+          <div className="grid grid-cols-7 text-center mb-1 text-sm text-gray-500 ">
             {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
               <div key={index}>{day}</div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-0.5">
-            {generateMonthDays().map((day, index) => (
-              <button
-                key={index}
-                onClick={() => handleDateSelect(day.date)}
-                className={`
-                  bg-transparent border-none h-8 w-8 flex items-center justify-center rounded-full cursor-pointer text-sm m-0.5 mx-auto
-                  ${!day.isCurrentMonth ? 'text-gray-400' : 'text-gray-800'} 
-                  ${isToday(day.date) ? 'bg-blue-500 text-white' : ''}
-                  ${
-                    isSelectedDate(day.date) && !isToday(day.date)
-                      ? 'bg-blue-100 text-blue-500'
-                      : ''
-                  }
-                  hover:bg-gray-100
-                `}
-              >
-                {day.date.getDate()}
-              </button>
-            ))}
+          <div className="grid grid-cols-7 gap-1">
+            {generateMonthDays().map((day, index) => {
+              const hasEvents = getEventsForDate(day.date).length > 0;
+              // Debug: Log dates with events to verify detection
+              if (hasEvents) {
+                console.log(`Events found on ${day.date.toISOString()}`);
+              }
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleDateSelect(day.date)}
+                  className={`
+                    relative bg-transparent border-none h-8 w-8 flex flex-col items-center justify-center rounded-full cursor-pointer text-sm m-0.5 mx-auto
+                    ${!day.isCurrentMonth ? 'text-gray-400' : 'text-gray-800'} 
+                    ${isToday(day.date) ? 'bg-blue-500 text-white' : ''}
+                    ${isSelectedDate(day.date) && !isToday(day.date) ? 'bg-blue-100 text-blue-500' : ''}
+                    hover:bg-gray-100
+                  `}
+                >
+                  {day.date.getDate()}
+                  {hasEvents && (
+                    <div className="absolute bottom-1 w-1 h-1 rounded-full bg-purple-500"></div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

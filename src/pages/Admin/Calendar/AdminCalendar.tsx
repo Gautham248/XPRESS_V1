@@ -78,12 +78,10 @@ const AdminCalendar = () => {
   }
 
   function handleEventClick(requestId: string): void {
-    // Set the selected request ID to show the modal
     setSelectedRequestId(requestId);
   }
 
   function handleCloseModal(): void {
-    // Clear the selected request ID to hide the modal
     setSelectedRequestId(null);
   }
 
@@ -157,7 +155,7 @@ const AdminCalendar = () => {
   }
 
   function isToday(date: Date): boolean {
-    const today = new Date();
+    const today = new Date(); 
     return (
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
@@ -201,6 +199,7 @@ const AdminCalendar = () => {
             isToday={isToday}
             isSelectedDate={isSelectedDate}
             handleDateSelect={handleDateSelect}
+            getEventsForDate={getEventsForDate}
           />
 
           <div className="flex-1 flex flex-col bg-white">
@@ -230,12 +229,11 @@ const AdminCalendar = () => {
               handleEventClick={handleEventClick}
             />
           </div>
-          
-          {/* Modal Component */}
+
           {selectedRequestId && (
             <ModalComponent 
               employeeId={selectedRequestId}
-              // onClose={handleCloseModal}
+              onClose={handleCloseModal}
             />
           )}
         </div>

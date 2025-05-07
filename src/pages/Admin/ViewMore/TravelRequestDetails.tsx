@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { dummyTravelRequests} from '../../../utils/travelRequestData';
 import { StepperComponent } from './Stepper/StepperComponent';
 import EmpDetailComponent from './EmpDetailComponent';
-
+ 
 // Define timeline step type
 export interface TimelineStep {
   id: number;
@@ -13,7 +13,7 @@ export interface TimelineStep {
   active: boolean;
   completed: boolean;
 }
-
+ 
 // Timeline steps in order of progression
 const timelineSteps: TimelineStep[] = [
   { id: 1, status: 'Pending', description: '', date: '', active: false, completed: false },
@@ -25,7 +25,7 @@ const timelineSteps: TimelineStep[] = [
   { id: 7, status: 'Returned', description: '', date: '', active: false, completed: false },
   { id: 8, status: 'Closed', description: '', date: '', active: false, completed: false },
 ];
-
+ 
 // Map status to timeline step index
 const statusToStep: Record<string, number> = {
   'Pending': 1,
@@ -38,7 +38,7 @@ const statusToStep: Record<string, number> = {
   'Closed': 8,
   'Rejected': -1, // Special case
 };
-
+ 
 // Dynamic descriptions for active state
 const getActiveDescription = (statusId: number): string => {
   switch (statusId) {
@@ -62,21 +62,21 @@ const getActiveDescription = (statusId: number): string => {
       return 'In progress';
   }
 };
-
+ 
 export default function TravelRequestDetails() {
   const { requestId } = useParams();
   const navigate = useNavigate();
-  
+ 
   // Find the request with the matching ID
   const request = dummyTravelRequests.find(req => req.requestId === requestId);
-  
+ 
   if (!request) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen p-6">
         <div className="w-full max-w-3xl bg-white rounded-lg shadow p-8">
           <h1 className="text-2xl font-bold text-red-600 mb-4">Request Not Found</h1>
           <p className="mb-6">The travel request you're looking for doesn't exist.</p>
-          <button 
+          <button
             onClick={() => navigate('/requestTable')}
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center gap-2"
           >
@@ -87,24 +87,24 @@ export default function TravelRequestDetails() {
       </div>
     );
   }
-
+ 
   // Format date for timeline
   const formatTimelineDate = (offset: number = 0) => {
     const date = new Date();
     date.setDate(date.getDate() - offset);
-    return date.toLocaleDateString('en-US', { 
-      day: 'numeric', 
-      month: 'short', 
+    return date.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
     });
   };
-
+ 
   // Update timeline steps based on request status
   const currentStepIndex = statusToStep[request.status];
   const isRejected = request.status === 'Rejected';
-  
+ 
   const updatedTimelineSteps = timelineSteps.map((step) => {
     if (isRejected) {
       return {
@@ -116,7 +116,7 @@ export default function TravelRequestDetails() {
       };
     } else {
       const daysOffset = currentStepIndex - step.id > 0 ? currentStepIndex - step.id : 0;
-      
+     
       return {
         ...step,
         active: step.id === currentStepIndex,
@@ -126,22 +126,23 @@ export default function TravelRequestDetails() {
       };
     }
   });
-  
+ 
   // Format dates for display in details section
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   };  
-  
+ 
   return (
     <div className="p-6">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Request Timeline */}
         <StepperComponent steps={updatedTimelineSteps} isRejected={isRejected}/>
-        
+       
         {/* Request Details */}
         <EmpDetailComponent request={request} onBackClick={() => navigate('/requestTable') } formatDate={formatDate}/>
       </div>
     </div>
   );
 }
+ 
