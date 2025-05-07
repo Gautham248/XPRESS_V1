@@ -7,10 +7,10 @@ import ModalComponent from './CalendarMoal/CalendarModalProps';
 import { CalendarDay, CalendarView } from './types';
 
 const AdminCalendar = () => {
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 4, 6)); // May 6, 2025
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 4, 6)); // May 6, 2025
   const [weekStartDate, setWeekStartDate] = useState<Date>(
-    getWeekStartDate(new Date())
+    getWeekStartDate(new Date(2025, 4, 6)) // Start the week from May 6, 2025
   );
   const [showMonthSelector, setShowMonthSelector] = useState<boolean>(false);
   const [calendarView, setCalendarView] = useState<CalendarView>('day');
@@ -78,12 +78,10 @@ const AdminCalendar = () => {
   }
 
   function handleEventClick(requestId: string): void {
-    // Set the selected request ID to show the modal
     setSelectedRequestId(requestId);
   }
 
   function handleCloseModal(): void {
-    // Clear the selected request ID to hide the modal
     setSelectedRequestId(null);
   }
 
@@ -157,7 +155,7 @@ const AdminCalendar = () => {
   }
 
   function isToday(date: Date): boolean {
-    const today = new Date();
+    const today = new Date(2025, 4, 6); // May 6, 2025
     return (
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
@@ -201,6 +199,7 @@ const AdminCalendar = () => {
             isToday={isToday}
             isSelectedDate={isSelectedDate}
             handleDateSelect={handleDateSelect}
+            getEventsForDate={getEventsForDate}
           />
 
           <div className="flex-1 flex flex-col bg-white">
@@ -230,12 +229,11 @@ const AdminCalendar = () => {
               handleEventClick={handleEventClick}
             />
           </div>
-          
-          {/* Modal Component */}
+
           {selectedRequestId && (
             <ModalComponent 
               employeeId={selectedRequestId}
-              // onClose={handleCloseModal}
+              onClose={handleCloseModal}
             />
           )}
         </div>

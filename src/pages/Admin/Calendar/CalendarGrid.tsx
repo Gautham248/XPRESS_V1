@@ -1,3 +1,4 @@
+import React from 'react';
 import { CalendarEvent, CalendarView } from './types';
 import EventCard from './EventCard';
 
@@ -33,12 +34,16 @@ const CalendarGrid = ({
                 const isSelected = isSelectedDate(day);
                 const dayOfWeek = day.toLocaleString('default', { weekday: 'short' });
                 const dayOfMonth = day.getDate();
+                const dayEvents = getEventsForDate(day);
+                const hasEvents = dayEvents.length > 0;
+                const highlightColor = ''; // Remove the border
 
                 return (
                   <div
                     key={index}
-                    className={`py-4 text-center border-b border-gray-200 cursor-pointer
-                      ${isSelected ? 'bg-gray-50' : ''}`}
+                    className={`py-4 text-center border-b border-gray-200 cursor-pointer ${highlightColor} ${
+                      isSelected ? 'bg-gray-50' : ''
+                    }`}
                     onClick={() => handleDateSelect(day)}
                   >
                     <div
@@ -92,7 +97,7 @@ const CalendarGrid = ({
                         <EventCard
                           key={eventIndex}
                           event={event}
-                          onClick={handleEventClick} // Pass onClick prop
+                          onClick={handleEventClick}
                         />
                       ))
                     ) : (
@@ -115,7 +120,7 @@ const CalendarGrid = ({
                       <EventCard
                         key={eventIndex}
                         event={event}
-                        onClick={handleEventClick} // Pass onClick prop
+                        onClick={handleEventClick}
                       />
                     ))}
                   </div>
