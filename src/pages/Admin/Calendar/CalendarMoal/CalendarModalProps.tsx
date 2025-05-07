@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { dummyTravelRequests } from '../../../../utils/travelRequestData';
 import Details from './Details';
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
 
 interface Employee {
@@ -71,6 +72,9 @@ const CalendarModal = ({ requestId, onClose }: CalendarModalProps) => {
 
         <div className="mt-6 flex justify-end">
           <Button onClick={handleClose} text="Close" />
+          <Link to  = {`/travel-request-details/${requestId}`} className="ml-2">
+            <Button onClick={handleClose} text="View More" />
+          </Link>
         </div>
       </div>
     </div>
