@@ -32,7 +32,7 @@ export function StepperComponent({ steps, isRejected }: StepperComponentProps) {
             <h2 className="text-xl font-semibold mb-6">Request Timeline</h2>
             <div className="relative">
                 {modifiedSteps.map((step, index) => (
-                    <div key={index} className="flex items-start mb-8 relative">
+                    <div key={step.id} className="flex items-start mb-8 relative">
                         {/* Connector Line */}
                         {index < modifiedSteps.length - 1 && (
                             <div
