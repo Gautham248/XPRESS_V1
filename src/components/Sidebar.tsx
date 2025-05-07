@@ -56,11 +56,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
         {/* Navigation Links */}
         <nav className="flex-1 px-2 py-4 space-y-1">
           <NavItem to="/" icon={<Home size={20} />} label="Home" />
+          <NavItem to="/requestTable" icon={<FileText size={20} />} label="Requests" />
           <NavItem to="/calendar" icon={<Calendar size={20} />} label="Calendar" />
           {/* <NavItem to="/dashboard" icon={<BarChart2 size={20} />} label="Dashboard" /> */}
           {/* <NavItem to="/users" icon={<Users size={20} />} label="Users" /> */}
-          <NavItem to="/requestTable" icon={<FileText size={20} />} label="Requests" />
-          <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" />
+          {/* <NavItem to="/settings" icon={<Settings size={20} />} label="Settings" /> */}
         </nav>
         
         {/* Sidebar Footer */}

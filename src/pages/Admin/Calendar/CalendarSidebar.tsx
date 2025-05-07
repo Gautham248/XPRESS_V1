@@ -169,6 +169,9 @@ const CalendarSidebar = ({
                   `}
                 >
                   {day.date.getDate()}
+                  {hasEvents && (
+                    <div className="absolute bottom-1 w-1 h-1 rounded-full bg-purple-500"></div>
+                  )}
                 </button>
               );
             })}

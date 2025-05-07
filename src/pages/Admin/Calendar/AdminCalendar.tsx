@@ -249,7 +249,7 @@ const AdminCalendar = () => {
 
           {selectedRequestId && (
             <ModalComponent 
-              employeeId={selectedRequestId}
+              requestId={selectedRequestId}
               onClose={handleCloseModal}
             />
           )}
