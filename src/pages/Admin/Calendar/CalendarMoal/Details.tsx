@@ -1,6 +1,3 @@
-import React from 'react';
- 
-// Define TypeScript interfaceV2 interface for Employee
 interface Employee {
   id: string;
   name: string;
@@ -10,11 +7,10 @@ interface Employee {
   deliveryUnit: number;
   source: string;
   destination: string;
-  travelMode: string;
   travelCategory: string;
 }
  
-// Define props interface
+
 interface DetailsProps {
   employee: Employee;
 }
