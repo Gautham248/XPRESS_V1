@@ -27,7 +27,7 @@ const Layout: React.FC = () => {
           </div>
         </main>
         
-        <Footer />
+        {/* <Footer /> */}
       </div>
     </div>
   );

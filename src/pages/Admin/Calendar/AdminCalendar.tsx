@@ -7,10 +7,10 @@ import ModalComponent from './CalendarMoal/CalendarModalProps';
 import { CalendarDay, CalendarView } from './types';
 
 const AdminCalendar = () => {
-  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(2025, 4, 6)); // May 6, 2025
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2025, 4, 6)); // May 6, 2025
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [weekStartDate, setWeekStartDate] = useState<Date>(
-    getWeekStartDate(new Date(2025, 4, 6)) // Start the week from May 6, 2025
+    getWeekStartDate(new Date())
   );
   const [showMonthSelector, setShowMonthSelector] = useState<boolean>(false);
   const [calendarView, setCalendarView] = useState<CalendarView>('day');
@@ -155,7 +155,7 @@ const AdminCalendar = () => {
   }
 
   function isToday(date: Date): boolean {
-    const today = new Date(2025, 4, 6); // May 6, 2025
+    const today = new Date(); 
     return (
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&

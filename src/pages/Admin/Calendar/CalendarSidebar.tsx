@@ -151,19 +151,17 @@ const CalendarSidebar = ({
                   key={index}
                   onClick={() => handleDateSelect(day.date)}
                   className={`
-                    bg-transparent border-none h-8 w-8 flex items-center justify-center rounded-full cursor-pointer text-sm m-0.5 mx-auto
+                    relative bg-transparent border-none h-8 w-8 flex flex-col items-center justify-center rounded-full cursor-pointer text-sm m-0.5 mx-auto
                     ${!day.isCurrentMonth ? 'text-gray-400' : 'text-gray-800'} 
                     ${isToday(day.date) ? 'bg-blue-500 text-white' : ''}
-                    ${
-                      isSelectedDate(day.date) && !isToday(day.date)
-                        ? 'bg-blue-100 text-blue-500'
-                        : ''
-                    }
-                    ${hasEvents ? 'bg-purple-400' : ''} 
+                    ${isSelectedDate(day.date) && !isToday(day.date) ? 'bg-blue-100 text-blue-500' : ''}
                     hover:bg-gray-100
                   `}
                 >
                   {day.date.getDate()}
+                  {hasEvents && (
+                    <div className="absolute bottom-1 w-1 h-1 rounded-full bg-purple-500"></div>
+                  )}
                 </button>
               );
             })}
