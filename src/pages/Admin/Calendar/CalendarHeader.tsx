@@ -15,6 +15,7 @@ interface CalendarHeaderProps {
   handleNextDay: () => void;
   formatDateRange: (startDate: Date) => string;
   formatSingleDate: (date: Date) => string;
+  setIsTodayClicked: Dispatch<SetStateAction<boolean>>;
 }
 
 const CalendarHeader = ({
@@ -30,11 +31,23 @@ const CalendarHeader = ({
   handleNextDay,
   formatDateRange,
   formatSingleDate,
+  setIsTodayClicked,
 }: CalendarHeaderProps) => {
   const [showViewSelector, setShowViewSelector] = useState<boolean>(false);
 
   const getCurrentDate = (): Date => {
-    return new Date(); // Returns May 7, 2025
+    const date = new Date();
+    date.setUTCHours(0, 0, 0, 0); // Normalize to midnight UTC
+    console.log("getCurrentDate called, returning (UTC):", date.toISOString());
+    return date;
+  };
+
+  const getWeekStartDate = (date: Date): Date => {
+    const day = date.getDay();
+    const diff = date.getDate() - day;
+    const newDate = new Date(date);
+    newDate.setDate(diff);
+    return newDate;
   };
 
   const toggleViewSelector = () => {
@@ -43,13 +56,12 @@ const CalendarHeader = ({
 
   const selectView = (view: CalendarView) => {
     setCalendarView(view);
-    if (view === 'day') {
-      const today = getCurrentDate(); // Reset to current date (May 7, 2025)
-      setSelectedDate(today);
-      setWeekStartDate(getWeekStartDate(today));
-    }
     setShowViewSelector(false);
   };
+
+  useEffect(() => {
+    console.log("CalendarHeader - selectedDate changed to (UTC):", selectedDate.toISOString());
+  }, [selectedDate]);
 
   useEffect(() => {
     if (showViewSelector) {
@@ -67,10 +79,26 @@ const CalendarHeader = ({
     }
   }, [showViewSelector]);
 
-  const getWeekStartDate = (date: Date): Date => {
-    const day = date.getDay();
-    const diff = date.getDate() - day;
-    return new Date(date.setDate(diff));
+  // Format the display for week view to include the current date
+  const formatWeekDisplay = (startDate: Date, currentDate: Date): string => {
+    const weekRange = formatDateRange(startDate);
+    const todayFormatted = formatSingleDate(currentDate);
+    return `${weekRange} (Today: ${todayFormatted})`;
+  };
+
+  // Handle the Today button click based on the current view
+  const handleTodayClick = () => {
+    const today = getCurrentDate();
+    console.log("Today button clicked - getCurrentDate returned (UTC):", today.toISOString());
+    
+    // Always set the selected date to today
+    setSelectedDate(today);
+    setIsTodayClicked(true);
+    
+    // Only update the week start date if we're in week view
+    if (calendarView === 'week') {
+      setWeekStartDate(getWeekStartDate(today));
+    }
   };
 
   return (
@@ -78,11 +106,7 @@ const CalendarHeader = ({
       <div className="flex items-center">
         <button
           className="bg-gray-100 border border-gray-200 text-gray-800 py-2 px-3 rounded mr-2 flex items-center cursor-pointer hover:bg-gray-200"
-          onClick={() => {
-            const today = getCurrentDate();
-            setSelectedDate(today);
-            setWeekStartDate(getWeekStartDate(today));
-          }}
+          onClick={handleTodayClick}
         >
           <span className="mr-1">📅</span>
           <span>Today</span>
@@ -103,7 +127,7 @@ const CalendarHeader = ({
 
         <div className="text-base font-semibold ml-4 text-gray-800">
           {calendarView === 'week'
-            ? formatDateRange(weekStartDate)
+            ? formatWeekDisplay(weekStartDate, selectedDate)
             : formatSingleDate(selectedDate)}
         </div>
       </div>

@@ -8,7 +8,7 @@ import { CalendarDay, CalendarView } from './types';
 
 const AdminCalendar = () => {
   const getCurrentDate = (): Date => {
-    return new Date(); // Returns May 7, 2025
+    return new Date(); // May 7, 2025
   };
 
   const today = getCurrentDate();
@@ -19,11 +19,14 @@ const AdminCalendar = () => {
   const [showMonthSelector, setShowMonthSelector] = useState<boolean>(false);
   const [calendarView, setCalendarView] = useState<CalendarView>('day');
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false);
 
   function getWeekStartDate(date: Date): Date {
     const day = date.getDay();
     const diff = date.getDate() - day;
-    return new Date(date.setDate(diff));
+    const newDate = new Date(date);
+    newDate.setDate(diff);
+    return newDate;
   }
 
   function addDays(date: Date, days: number): Date {
@@ -69,9 +72,19 @@ const AdminCalendar = () => {
   }
 
   function handleDateSelect(date: Date): void {
+    console.log("handleDateSelect called with date (UTC):", date.toISOString());
+    if (isTodayClicked) {
+      console.log("Ignoring handleDateSelect because Today button was clicked");
+      setIsTodayClicked(false);
+      return;
+    }
     setSelectedDate(date);
-    const newWeekStartDate = getWeekStartDate(new Date(date));
-    setWeekStartDate(newWeekStartDate);
+    
+    // Only update week start date if we're in week view
+    if (calendarView === 'week') {
+      const newWeekStartDate = getWeekStartDate(new Date(date));
+      setWeekStartDate(newWeekStartDate);
+    }
 
     if (calendarView === 'day') {
       setTimeout(() => {
@@ -175,7 +188,6 @@ const AdminCalendar = () => {
     );
   }
 
-  // Synchronize currentMonth with selectedDate
   useEffect(() => {
     if (
       selectedDate.getMonth() !== currentMonth.getMonth() ||
@@ -185,7 +197,6 @@ const AdminCalendar = () => {
     }
   }, [selectedDate]);
 
-  // Ensure selectedDate is set to the current date on mount
   useEffect(() => {
     const today = getCurrentDate();
     if (
@@ -195,7 +206,11 @@ const AdminCalendar = () => {
     ) {
       handleDateSelect(today);
     }
-  }, []); // Run only on mount
+  }, []);
+
+  useEffect(() => {
+    console.log("AdminCalendar - weekStartDate changed to (UTC):", weekStartDate.toISOString());
+  }, [weekStartDate]);
 
   const weekDays = generateWeekDays();
 
@@ -233,6 +248,7 @@ const AdminCalendar = () => {
               handleNextDay={handleNextDay}
               formatDateRange={formatDateRange}
               formatSingleDate={formatSingleDate}
+              setIsTodayClicked={setIsTodayClicked}
             />
 
             <CalendarGrid
