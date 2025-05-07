@@ -1,6 +1,3 @@
-import React from 'react';
- 
-// Define props interface
 interface ButtonProps {
   onClick: () => void;
   text: string;

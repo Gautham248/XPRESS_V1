@@ -3,7 +3,7 @@ import { dummyTravelRequests } from '../../../../utils/travelRequestData';
 import Details from './Details';
 import Button from './Button';
 
-// Interface aligned with expected fields, including those not in TravelRequestTableRow
+
 interface Employee {
   id: string;
   name: string;
@@ -13,35 +13,33 @@ interface Employee {
   deliveryUnit: number;
   source: string;
   destination: string;
-  travelMode: string; // Keep this as Details component requires it
   travelCategory: string;
 }
 
-// Map TravelRequestTableRow to Employee interface
+
 const mapToEmployee = (travelRequest: typeof dummyTravelRequests[0]): Employee => ({
-  id: travelRequest.requestId, // Map requestId to id
+  id: travelRequest.requestId, 
   name: travelRequest.name,
   travelType: travelRequest.travelType,
   projectCode: travelRequest.projectCode,
   reportingManager: travelRequest.reportingManager,
-  deliveryUnit: parseInt(travelRequest.department?.replace('DU', '') || '0', 10), // Derive from department, e.g., "DU3" -> 3
+  deliveryUnit: parseInt(travelRequest.department?.replace('DU', '') || '0', 10), 
   source: travelRequest.source,
   destination: travelRequest.destination,
-  travelMode: '', // Empty string instead of 'Unknown'
-  travelCategory: travelRequest.travelType === 'International' ? 'Overseas' : 'Local', // Example derivation
+  travelCategory: travelRequest.travelType === 'International' ? 'International' : 'Domestic', 
 });
 
 interface CalendarModalProps {
   employeeId: string;
-  onClose: () => void; // Add onClose prop to handle closing from parent
+  onClose: () => void; 
 }
 
 const CalendarModal = ({ employeeId, onClose }: CalendarModalProps) => {
-  // Map dummyTravelRequests to Employee and find by id
+  
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   
   useEffect(() => {
-    // Find the employee whenever employeeId changes
+    
     const employee = dummyTravelRequests
       .map(mapToEmployee)
       .find((employee: Employee) => employee.id === employeeId) || null;
@@ -50,10 +48,10 @@ const CalendarModal = ({ employeeId, onClose }: CalendarModalProps) => {
   }, [employeeId]);
 
   const handleClose = () => {
-    onClose(); // Call the parent's onClose function
+    onClose(); 
   };
 
-  // If no employee found, don't render the modal
+ 
   if (!selectedEmployee) return null;
 
   return (
