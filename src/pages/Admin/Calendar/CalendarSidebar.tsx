@@ -153,7 +153,7 @@ const CalendarSidebar = ({
                   className={`
                     relative bg-transparent border-none h-8 w-8 flex flex-col items-center justify-center rounded-full cursor-pointer text-sm m-0.5 mx-auto
                     ${!day.isCurrentMonth ? 'text-gray-400' : 'text-gray-800'} 
-                    ${isToday(day.date) ? 'bg-blue-500 text-white' : ''}
+                    ${isToday(day.date) ? 'bg-blue-500 text-black' : ''}
                     ${isSelectedDate(day.date) && !isToday(day.date) ? 'bg-blue-100 text-blue-500' : ''}
                     hover:bg-gray-100
                   `}
